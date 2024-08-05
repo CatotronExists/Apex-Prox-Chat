@@ -2,7 +2,7 @@ import nextcord
 from nextcord.ext import commands
 from Main import formatOutput, errorResponse, updatePresence, getGameData
 from BotData.colors import *
-from Keyss import DB
+from Keys import DB
 
 class Command_end_session_Cog(commands.Cog):
     def __init__(self, bot: commands.Bot):

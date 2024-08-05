@@ -2,7 +2,7 @@ import nextcord
 from nextcord.ext import commands
 from Main import formatOutput, errorResponse
 from BotData.colors import *
-from Keyss import DB
+from Keys import DB
 
 class Command_link_Cog(commands.Cog):
     def __init__(self, bot: commands.Bot):

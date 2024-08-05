@@ -3,7 +3,7 @@ from nextcord.ext import commands
 from Main import formatOutput, errorResponse, updatePresence, getGameData
 from BotData.colors import *
 from BotData.mapdata import MapData
-from Keyss import DB
+from Keys import DB
 
 class Command_start_session_Cog(commands.Cog):
     def __init__(self, bot: commands.Bot):

@@ -8,7 +8,7 @@ from nextcord.ext import commands
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from BotData.colors import *
 from BotData.mapdata import MapData
-from Keyss import *
+from Keys import *
 
 # Command List
 command_list = ["start_session", "end_session", "link", "unlink_all"]
