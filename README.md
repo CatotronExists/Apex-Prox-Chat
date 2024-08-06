@@ -1,11 +1,12 @@
 # Apex Proximity Chat
 A crude implementation of proximity chat for Apex Legends.\
-**This will only work within custom games, public/ranked games will not work.**
-*This acts more like a proof-of-concept, that may be expanded on in the future.*
-For now, an API is called and the bot uses this data to locate each player and moves players to differnet VCs based on the closest POI to thm. One VC per POI, so anyone can communicate with anyone in the same POI.
+**This will only work within custom games, public/ranked games will not work.**\
+*This acts more like a proof-of-concept, that may be expanded on in the future.*\
+For now, an API is called and the bot uses this data to locate each player and moves players to differnet VCs based on the closest POI to them.\
+One VC per POI, so anyone can communicate with anyone in the same POI.
 
 ## NOTICE
-Due to Olympus not being in custom game rotation (when this was created), Olympus will not work in proximity chat. Once it comes back into rotation coordinate data will be added.
+Due to Olympus not being in custom game rotation (when this was created), Olympus will not work in proximity chat. Once it comes back into rotation coordinate data will be added.\
 Some POIs may also be missing, all this will be fixed upon the new map 'E-District' being avaliable
 
 This may or may not be updated as new maps/map changes are added to the game.
