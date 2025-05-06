@@ -1,14 +1,13 @@
 import nextcord
 from nextcord.ext import commands
-from Main import formatOutput, errorResponse
+from Main import formatOutput, errorResponse, getAllPlayers, updateJsonFile
 from BotData.colors import *
-from Keys import DB
 
 class Command_unlink_all_Cog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @nextcord.slash_command(name="unlink_all", description="Unlink all discord to in-game accounts, THIS CANNOT BE UNDONE", default_member_permissions=(nextcord.Permissions(administrator=True)))
+    @nextcord.slash_command(name="unlink_all", description="Unlink all discord to in-game accounts and delete all player data, THIS CANNOT BE UNDONE", default_member_permissions=(nextcord.Permissions(administrator=True)))
     async def unlink_all(self, interaction: nextcord.Interaction):
         global command
         command = {"name": interaction.application_command.name, "userID": interaction.user.id, "guildID": interaction.guild.id}
@@ -18,16 +17,14 @@ class Command_unlink_all_Cog(commands.Cog):
         except: pass # Discord can sometimes error on defer()
 
         try:
-            embed = nextcord.Embed(title="**UNLINKING ALL ACCOUNTS (Stage 1/)**", description=f"Gathering links...", color=White)
-            await interaction.edit_original_message(embed=embed)
+            players = getAllPlayers()
+            if players == None: # No players linked
+                embed = nextcord.Embed(title="**Error**", description="No accounts linked to unlink", color=Red)
+                await interaction.edit_original_message(embed=embed)
+                return
 
-            links = list(DB.Main.PlayerData.find()) # Get all linked accounts
-
-            embed = nextcord.Embed(title="**UNLINKING ALL ACCOUNTS (Stage 2/2)**", description=f"Unlinking...", color=White)
-            await interaction.edit_original_message(embed=embed)
-
-            for link in links: # Unlink all accounts
-                DB.Main.PlayerData.delete_one({"discordID": link["discordID"]})
+            else: # Remove all players from JSON file
+                updateJsonFile("players", [])
 
             embed = nextcord.Embed(title="**ALL ACCOUNTS UNLINKED**", description=f"Unlinking Complete", color=Green)
             await interaction.edit_original_message(embed=embed)

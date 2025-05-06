@@ -1,9 +1,8 @@
 import nextcord
 from nextcord.ext import commands
-from Main import formatOutput, errorResponse, updatePresence, getGameData
+from Main import formatOutput, errorResponse, updatePresence, getVCs, updateJsonFile
 from BotData.colors import *
 from BotData.mapdata import MapData
-from Keys import DB
 
 class Command_start_session_Cog(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -19,41 +18,44 @@ class Command_start_session_Cog(commands.Cog):
         except: pass # Discord can sometimes error on defer()
 
         try:
-            if getGameData() != None:
+            if getVCs() != None: # Channels already exist, so infer a session is already running
                 embed = nextcord.Embed(title="**Error**", description="There is already an active session. Please end the current session before starting a new one", color=Red)
                 await interaction.edit_original_message(embed=embed)
-                formatOutput(output="   There is already an active session. Please end the current session before starting a new one", status="Error", context=command['guildID'])
                 return
 
-            embed = nextcord.Embed(title="**Starting Up Proximity Chat Session (Stage 1/2)**", description=f"Prepairing...\n\n**Map:** {map}", color=White)
+            # Session not running, start one
+            embed = nextcord.Embed(title="**Starting Up Proximity Chat Session (Stage 1/3)**", description=f"Prepairing...\n\n**Map:** {map}", color=White)
             await interaction.edit_original_message(embed=embed)
-
-            DB.Main.GameData.insert_one({"map": map, "status": "Lobby"})
 
             map_data = MapData[map]
 
-            embed = nextcord.Embed(title="**Starting Up Proximity Chat Session (Stage 2/2)**", description=f"Creating Voice Channels...", color=White)
+            embed = nextcord.Embed(title="**Starting Up Proximity Chat Session (Stage 2/3)**", description=f"Creating Voice Channel Catergory", color=White)
             await interaction.edit_original_message(embed=embed)
 
             catergory = await interaction.guild.create_category("Proximity Chat")
-            id_data = {"vcCatergory": catergory.id, "vcList": {}}
+            updateJsonFile("vcCatergory", catergory.id)
 
+            embed = nextcord.Embed(title="**Starting Up Proximity Chat Session (Stage 3/3)**", description=f"Creating Voice Channels...", color=White)
+            await interaction.edit_original_message(embed=embed)
+
+            vc_ids = {}
             lobby_vc = await interaction.guild.create_voice_channel("LOBBY", category=catergory)
-            id_data["vcList"]["LOBBY"] = lobby_vc.id
+            vc_ids["LOBBY"] = lobby_vc.id
 
             dead_vc = await interaction.guild.create_voice_channel("DEAD", category=catergory, overwrites={interaction.guild.default_role: nextcord.PermissionOverwrite(view_channel=False)})
-            id_data["vcList"]["DEAD"] = dead_vc.id
+            vc_ids["DEAD"] = dead_vc.id
 
-            for poi, poi_data in map_data.items():
+            for poi in map_data.keys():
                 vc = await interaction.guild.create_voice_channel(poi, category=catergory, overwrites={interaction.guild.default_role: nextcord.PermissionOverwrite(view_channel=False)})
-                id_data["vcList"][poi] = vc.id
+                vc_ids[poi] = vc.id
 
-            DB.Main.IDs.insert_one(id_data)
+            updateJsonFile("vcList", vc_ids)
+            updateJsonFile("map", map)
 
             embed = nextcord.Embed(title="**Proximity Chat Session Started**", description=f"Voice Channels Created", color=Green)
             await interaction.edit_original_message(embed=embed)
 
-            await updatePresence(f"Session on {map}")
+            await updatePresence(f"Proximity Chat session on {map}!")
 
         except Exception as e: await errorResponse(e, command, interaction)
 

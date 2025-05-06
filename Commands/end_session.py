@@ -1,8 +1,7 @@
 import nextcord
 from nextcord.ext import commands
-from Main import formatOutput, errorResponse, updatePresence, getGameData
+from Main import formatOutput, errorResponse, updatePresence, getVCs, updateJsonFile, readJsonFile
 from BotData.colors import *
-from Keys import DB
 
 class Command_end_session_Cog(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -18,31 +17,32 @@ class Command_end_session_Cog(commands.Cog):
         except: pass # Discord can sometimes error on defer()
 
         try:
-            if getGameData() == None:
+            IDs = getVCs()
+            if IDs == None: # No Channels exist, so infer no session is running
                 embed = nextcord.Embed(title="**Error**", description="There is no active session to end", color=Red)
                 await interaction.edit_original_message(embed=embed)
-                formatOutput(output="   There is no active session to end", status="Error", context=command['guildID'])
                 return
 
-            embed = nextcord.Embed(title="**Ending Proximity Chat Session (Stage 1/3)**", description=f"Prepairing...", color=White)
+            # Session is running, end it
+            embed = nextcord.Embed(title="**Ending Proximity Chat Session (Stage 1/2)**", description=f"Deleting Voice Channels...", color=White)
             await interaction.edit_original_message(embed=embed)
 
-            IDs = DB.Main.IDs.find_one({"vcCatergory": {"$exists": True}})
-            embed = nextcord.Embed(title="**Ending Proximity Chat Session (Stage 2/3)**", description=f"Deleting Voice Channels...", color=White)
+            for name, id in IDs.items():
+                vc = interaction.guild.get_channel(id)
+                if vc != None: await vc.delete()
+
+            updateJsonFile("vcList", None)
+
+            embed = nextcord.Embed(title="**Ending Proximity Chat Session (Stage 2/2)**", description=f"Cleaning Up...", color=White)
             await interaction.edit_original_message(embed=embed)
 
-            for id in IDs["vcList"]:
-                vc = interaction.guild.get_channel(IDs["vcList"][id])
-                await vc.delete()
+            vc_catergory_id = readJsonFile("vcCatergory")
 
-            embed = nextcord.Embed(title="**Ending Proximity Chat Session (Stage 3/3)**", description=f"Cleaning Up...", color=White)
-            await interaction.edit_original_message(embed=embed)
+            catergory = interaction.guild.get_channel(vc_catergory_id)
+            if catergory != None: await catergory.delete()
 
-            catergory = interaction.guild.get_channel(IDs["vcCatergory"])
-            await catergory.delete()
-
-            DB.Main.IDs.delete_one({"vcCatergory": catergory.id}) # Wipe VC IDs
-            DB.Main.GameData.delete_one({"map": {"$exists": True}}) # Wipe Game Data
+            updateJsonFile("map", None)
+            updateJsonFile("vcCatergory", None)
 
             embed = nextcord.Embed(title="**Proximity Chat Session Ended**", description=f"Voice Channels Deleted", color=Green)
             await interaction.edit_original_message(embed=embed)

@@ -1,8 +1,7 @@
 import nextcord
 from nextcord.ext import commands
-from Main import formatOutput, errorResponse
+from Main import formatOutput, errorResponse, addPlayer, getPlayer, updatePlayer
 from BotData.colors import *
-from Keys import DB
 
 class Command_link_Cog(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -21,18 +20,15 @@ class Command_link_Cog(commands.Cog):
             embed = nextcord.Embed(title="**Linking IGN**", description=f"Linking IGN: `{ign}` to Discord Account: `{interaction.user.name}`\nPlease Wait, this will take a few moments", color=White)
             await interaction.edit_original_message(embed=embed)
 
-            if DB.Main.PlayerData.find_one({"discordID": interaction.user.id}) == None: # If user has not linked before
-                DB.Main.PlayerData.insert_one({
-                    "discordID": interaction.user.id,
-                    "IGN": ign,
-                    "currentPOI": None,
-                    "healthState": "Alive"
-                })
+            if getPlayer(interaction.user.id) == None: # Discord user has not linked before
+                player_data = {"inGameName": ign, "currentRegion": None, "isAlive": None, "discordID": interaction.user.id}
+                addPlayer(player_data) # Add player to JSON file
 
-            else: # If user has linked before -> update
-                DB.Main.PlayerData.update_one({"discordID": interaction.user.id}, {"$set": {"IGN": ign}})
+            else: # Discord user has linked before, so update their IGN
+                updatePlayer(interaction.user.id, "inGameName", ign)
 
-            embed = nextcord.Embed(title="**Linking IGN**", description=f"Linking Complete\n{interaction.user.name}/{interaction.user.id} 🔗 {ign}", color=Green)
+            embed = nextcord.Embed(title="**Linking IGN**", description=f"Linking Complete\n{interaction.user.name} ({interaction.user.id}) 🔗 {ign}", color=Green)
+            embed.set_footer(text="Mistyped your IGN? run /link again to update it!")
             await interaction.edit_original_message(embed=embed)
 
         except Exception as e: await errorResponse(e, command, interaction)
