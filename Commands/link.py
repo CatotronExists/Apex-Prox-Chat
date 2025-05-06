@@ -21,7 +21,7 @@ class Command_link_Cog(commands.Cog):
             await interaction.edit_original_message(embed=embed)
 
             if getPlayer(interaction.user.id) == None: # Discord user has not linked before
-                player_data = {"inGameName": ign, "currentRegion": None, "isAlive": None, "discordID": interaction.user.id}
+                player_data = {"inGameName": ign, "currentRegion": None, "discordID": interaction.user.id}
                 addPlayer(player_data) # Add player to JSON file
 
             else: # Discord user has linked before, so update their IGN

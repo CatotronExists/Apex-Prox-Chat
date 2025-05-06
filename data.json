@@ -3,5 +3,11 @@
     "vcCatergory": null,
     "vcList": null,
     "map": null,
-    "players": []
+    "players": [
+        {
+            "inGameName": "Catotron",
+            "currentRegion": null,
+            "discordID": 515470819804184577
+        }
+    ]
 }
