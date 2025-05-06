@@ -45,6 +45,9 @@ class Command_start_session_Cog(commands.Cog):
             dead_vc = await interaction.guild.create_voice_channel("DEAD", category=catergory, overwrites={interaction.guild.default_role: nextcord.PermissionOverwrite(view_channel=False)})
             vc_ids["DEAD"] = dead_vc.id
 
+            final_vc = await interaction.guild.create_voice_channel("FINAL RING", category=catergory, overwrites={interaction.guild.default_role: nextcord.PermissionOverwrite(view_channel=False)})
+            vc_ids["FINAL RING"] = final_vc.id
+
             for poi in map_data.keys():
                 vc = await interaction.guild.create_voice_channel(poi, category=catergory, overwrites={interaction.guild.default_role: nextcord.PermissionOverwrite(view_channel=False)})
                 vc_ids[poi] = vc.id
