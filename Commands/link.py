@@ -27,7 +27,7 @@ class Command_link_Cog(commands.Cog):
             else: # Discord user has linked before, so update their IGN
                 updatePlayer(interaction.user.id, "inGameName", ign)
 
-            embed = nextcord.Embed(title="**Linking IGN**", description=f"Linking Complete\n{interaction.user.name} ({interaction.user.id}) 🔗 {ign}", color=Green)
+            embed = nextcord.Embed(title="**Linking IGN**", description=f"Linking Complete\n{interaction.user.name.capitalize()} ({interaction.user.id}) 🔗 {ign}", color=Green)
             embed.set_footer(text="Mistyped your IGN? run /link again to update it!")
             await interaction.edit_original_message(embed=embed)
 
