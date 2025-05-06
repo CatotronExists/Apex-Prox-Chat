@@ -3,6 +3,7 @@
     "vcCatergory": null,
     "vcList": null,
     "map": null,
+    "movementLocked": false,
     "players": [
         {
             "inGameName": "Catotron",
