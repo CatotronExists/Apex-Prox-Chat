@@ -1,14 +1,10 @@
 {
     "gameState": null,
-    "vcCatergory": null,
+    "vcCatergories": [],
+    "evacVC": null,
     "vcList": null,
     "map": null,
-    "movementLocked": false,
-    "players": [
-        {
-            "inGameName": "Catotron",
-            "currentRegion": null,
-            "discordID": 515470819804184577
-        }
-    ]
+    "gamemode": null,
+    "movementLocked": true,
+    "currentObservations": {}
 }

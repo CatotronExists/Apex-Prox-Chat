@@ -26,7 +26,7 @@ class Command_unlink_all_Cog(commands.Cog):
             else: # Remove all players from JSON file
                 updateJsonFile("players", [])
 
-            embed = nextcord.Embed(title="**ALL ACCOUNTS UNLINKED**", description=f"Unlinking Complete", color=Green)
+            embed = nextcord.Embed(title="**ALL ACCOUNTS UNLINKED**", color=Green)
             await interaction.edit_original_message(embed=embed)
 
         except Exception as e: await errorResponse(e, command, interaction)

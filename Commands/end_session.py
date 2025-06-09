@@ -33,16 +33,20 @@ class Command_end_session_Cog(commands.Cog):
 
             updateJsonFile("vcList", None)
 
-            embed = nextcord.Embed(title="**Ending Proximity Chat Session (Stage 2/2)**", description=f"Cleaning Up...", color=White)
+            embed = nextcord.Embed(title="**Ending Proximity Chat Session (Stage 2/2)**", description=f"Cleaning Up Categories", color=White)
             await interaction.edit_original_message(embed=embed)
 
-            vc_catergory_id = readJsonFile("vcCatergory")
+            vc_catergory_id = readJsonFile("vcCatergories")
 
-            catergory = interaction.guild.get_channel(vc_catergory_id)
-            if catergory != None: await catergory.delete()
+            for catergory_id in vc_catergory_id:
+                catergory = interaction.guild.get_channel(catergory_id)
+                if catergory != None: await catergory.delete()
 
             updateJsonFile("map", None)
-            updateJsonFile("vcCatergory", None)
+            updateJsonFile("gamemode", None)
+            updateJsonFile("gameState", None)
+            updateJsonFile("movementLocked", False)
+            updateJsonFile("vcCatergories", [])
 
             embed = nextcord.Embed(title="**Proximity Chat Session Ended**", description=f"Voice Channels Deleted", color=Green)
             await interaction.edit_original_message(embed=embed)
