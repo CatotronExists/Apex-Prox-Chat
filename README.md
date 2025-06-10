@@ -34,9 +34,8 @@ Include ```+cl_liveapi_enabled 1``` & ```+cl_liveapi_ws_servers "ws://127.0.0.1:
 2. In the "Installation" tab, add "bot" to the Guild Install. Then add "Administrator" permissions to the bot. This will allow the bot to manage voice channels and roles.
 3. Download the latest release from the [releases page](https://github.com/CatotronExists/Apex-Prox-Chat/releases)
 4. Run `Main.py`. The bot should start up, run `/start_session`, get all participants to link with `/link`, join the "LOBBY" voice channel, and start playing!
-5. 
 
-*The host must be in observer for this to work, host is not able to play*
+*The host must be in observer for this to work, host is not able to play*\
 *Note: The regions are estimated to be slightly off, by a maximum of 5-8 meters. This is likely unoticable by players*
 
 # General Player Guide
