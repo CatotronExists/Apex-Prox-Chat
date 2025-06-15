@@ -10,8 +10,7 @@ class Command_start_session_Cog(commands.Cog):
 
     @nextcord.slash_command(name="start_session", description="Start a poximity chat session (Creates Voice Channels)", default_member_permissions=(nextcord.Permissions(administrator=True)))
     async def start_session(self, interaction: nextcord.Interaction,
-        map = nextcord.SlashOption(name="map", description="Select Map", required=True, choices={"E-District (BR)": "E-District", "World's Edge (BR)": "Worlds Edge", "Broken Moon (BR)": "Broken Moon", "Monument (Mixtape)": "Monument", "Fragment East (Mixtape)": "Fragment East", "Lava Siphon (Mixtape)": "Lava Siphon"}),
-        game_mode = nextcord.SlashOption(name="game_mode", description="Select Game Mode (Required when picking a (Mixtape) map)", required=False, choices={"BR": "BR", "Control": "Control", "TDM": "TDM", "Gun Run": "Gun Run", "Arenas": "Arenas"})):
+        map = nextcord.SlashOption(name="map", description="Select Map", required=True, choices={"World's Edge (BR)": "Worlds Edge", "Olympus (BR)": "Olympus", "Broken Moon (BR)": "Broken Moon", "E-District (BR)": "E-District"})):
 
         global command
         command = {"name": interaction.application_command.name, "userID": interaction.user.id, "guildID": interaction.guild.id}
@@ -25,27 +24,6 @@ class Command_start_session_Cog(commands.Cog):
                 embed = nextcord.Embed(title="**Error**", description="There is already an active session. Please end the current session before starting a new one", color=Red)
                 await interaction.edit_original_message(embed=embed)
                 return
-
-            br_maps = ["Kings Canyon", "Worlds Edge", "Storm Point", "Olympus", "Broken Moon", "E-District"]
-            mixtape_maps = ["Thunderdome"]
-            arenas_maps = ["Overflow", "Drop-off", "Encore"]
-
-            if map in br_maps: # If BR map
-                game_mode = "BR" # Set game mode to BR
-
-            elif map in mixtape_maps: # If Mixtape map
-                if game_mode == None:
-                    embed = nextcord.Embed(title="**Error**", description="You must select a game mode when picking a Mixtape map", color=Red)
-                    await interaction.edit_original_message(embed=embed)
-                    return
-
-                elif game_mode not in ["Control", "TDM", "Gun Run"]: # If game mode is not a valid Mixtape game mode
-                    embed = nextcord.Embed(title="**Error**", description="You must select a valid Mixtape game mode", color=Red)
-                    await interaction.edit_original_message(embed=embed)
-                    return
-
-            elif map in arenas_maps: # If Arenas map
-                game_mode = "Arenas" # Set game mode to Arenas
 
             # Session not running, start one
             embed = nextcord.Embed(title="**Starting Up Proximity Chat Session (Stage 1/2)**", description=f"Prepairing...\n\n**Map:** {map}", color=White)

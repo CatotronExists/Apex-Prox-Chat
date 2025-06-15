@@ -10,8 +10,7 @@ class Command_switch_map_Cog(commands.Cog):
 
     @nextcord.slash_command(name="switch_map", description="Switch map for proximity chat (It is recommended to first have set an evac vc)", default_member_permissions=(nextcord.Permissions(administrator=True)))
     async def switch_map(self, interaction: nextcord.Interaction,
-        map = nextcord.SlashOption(name="map", description="Select Map", required=True, choices={"E-District (BR)": "E-District", "World's Edge (BR)": "Worlds Edge", "Broken Moon (BR)": "Broken Moon", "Monument (Mixtape)": "Monument", "Fragment East (Mixtape)": "Fragment East", "Lava Siphon (Mixtape)": "Lava Siphon"}),
-        game_mode = nextcord.SlashOption(name="game_mode", description="Select Game Mode (Required when picking a (Mixtape) map)", required=False, choices={"BR": "BR", "Control": "Control", "TDM": "TDM", "Gun Run": "Gun Run", "Arenas": "Arenas"})):
+        map = nextcord.SlashOption(name="map", description="Select Map", required=True, choices={"World's Edge (BR)": "Worlds Edge", "Olympus (BR)": "Olympus", "Broken Moon (BR)": "Broken Moon", "E-District (BR)": "E-District"})):
 
         global command
         command = {"name": interaction.application_command.name, "userID": interaction.user.id, "guildID": interaction.guild.id}
