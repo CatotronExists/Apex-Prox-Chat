@@ -458,7 +458,7 @@ async def main():
 
     api_task = asyncio.create_task(LiveApex.Core.startLiveAPI())
     listener_task = asyncio.create_task(LiveApex.Core.startListener(filter_events))
-    workers = [asyncio.create_task(event_worker()) for _ in range(5)] # 5 working threads for processing events
+    workers = [asyncio.create_task(event_worker()) for _ in range(10)] # 10 working threads for processing events, change as required
 
     await asyncio.gather(scheduler_tasks_task, bot_task, api_task, listener_task, *workers)
 
