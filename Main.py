@@ -328,7 +328,7 @@ async def eventHandler(event): # Handle events from LiveApex
 
                 elif event['category'] == "matchSetup":
                     playlist = event['playlistName']
-                    if playlist == "World's Edge" or playlist == "E-District" or playlist == "Broken Moon":
+                    if playlist == "World's Edge" or playlist == "E-District" or playlist == "Broken Moon" or playlist == "Olympus":
                         updateJsonFile("gamemode", "BR")
                     elif playlist == "Team Deathmatch" or playlist == "Big Team Deathmatch":
                         updateJsonFile("gamemode", "TDM")
